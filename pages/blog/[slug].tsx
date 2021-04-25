@@ -7,7 +7,7 @@ import hydrate from 'next-mdx-remote/hydrate';
 import mdx from '@mdx-js/mdx';
 import PostLayout, { PostMetaData } from '../../components/PostLayout';
 
-import { postsFilePaths, POSTS_PATH } from '../../utils/mdxUtils';
+import { postFilePaths, POSTS_PATH } from '../../utils/mdxUtils';
 
 type PostPageProps = {
     meta: PostMetaData;
@@ -40,8 +40,8 @@ export const getStaticProps = async ({ params }) => {
     };
 };
 
-export const getStaticPaths = async () => {
-    const paths = postsFilePaths
+export const getStaticPaths = () => {
+    const paths = postFilePaths
         .map((path) => path.replace(/\.mdx?$/, ''))
         .map((slug) => ({ params: { slug } }));
 
