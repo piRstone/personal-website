@@ -5,14 +5,14 @@ import { FC } from 'react';
 const Home: FC = () => {
   const currentYear = new Date().getFullYear();
   return (
-    <div className="bg-white dark:bg-gray-900 h-screen text-white dark:text-gray-300">
+    <div className="bg-white dark:bg-gray-900 h-screen text-black dark:text-gray-300">
       <Head>
         <title>piRstone</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
 
-      <header className="py-4">
+      <header className="py-4 sticky top-0 bg-white dark:bg-gray-900">
         <div className="max-w-screen-lg mx-auto">
           <Link href="/">
             <span className="uppercase font-black tracking-wider text-black text-lg dark:text-gray-300">pirstone</span>
