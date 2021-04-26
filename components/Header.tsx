@@ -1,7 +1,12 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Header: FC = () => {
+    const { pathname } = useRouter();
+
+    const blogActive = pathname.split('/')[1] === 'blog' ? 'underline' : '';
+
     return (
         <header className="py-4 sticky top-0 bg-white dark:bg-gray-900">
             <div className="max-w-screen-lg mx-auto">
@@ -15,7 +20,7 @@ const Header: FC = () => {
                         <ul className="flex flex-row items-center">
                             <li className="py-1 px-3">
                                 <Link href="/blog">
-                                    <a>Blog</a>
+                                    <a className={blogActive}>Blog</a>
                                 </Link>
                             </li>
                             <li className="py-1 px-3">

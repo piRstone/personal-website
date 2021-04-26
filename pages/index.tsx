@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 const Home: FC = () => {
   return (
-    <div className="bg-white dark:bg-gray-900 h-screen text-black dark:text-gray-300">
+    <div className="bg-white dark:bg-gray-900 min-h-screen text-black dark:text-gray-300">
       <Head>
         <title>piRstone</title>
         <link rel="icon" href="/favicon.ico" />
