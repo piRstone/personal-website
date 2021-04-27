@@ -9,7 +9,7 @@ module.exports = {
         sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter var', ...defaultTheme.fontFamily.sans]
       },
       typography: (theme) => ({
-        default: {
+        DEFAULT: {
           css: {
             color: theme('colors.black')
           }
@@ -17,19 +17,33 @@ module.exports = {
         dark: {
           css: {
             color: theme('colors.gray.300'),
-            h1: theme('colors.gray.300'),
-            h2: theme('colors.gray.300'),
-            h3: theme('colors.gray.300'),
-            h4: theme('colors.gray.300'),
-            h5: theme('colors.gray.300'),
-            h6: theme('colors.gray.300'),
+            h1: {
+              color: theme('colors.gray.300'),
+            },
+            h2: {
+              color: theme('colors.gray.300'),
+            },
+            h3: {
+              color: theme('colors.gray.300'),
+            },
+            h4: {
+              color: theme('colors.gray.300'),
+            },
+            h5: {
+              color: theme('colors.gray.300'),
+            },
+            h6: {
+              color: theme('colors.gray.300'),
+            },
           }
         }
       }),
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      typography: 'dark',
+    },
   },
   plugins: [
     require('@tailwindcss/typography'),

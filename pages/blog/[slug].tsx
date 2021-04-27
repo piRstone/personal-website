@@ -8,6 +8,7 @@ import mdx from '@mdx-js/mdx';
 import PostLayout, { PostMetaData } from '../../components/PostLayout';
 
 import { postFilePaths, POSTS_PATH } from '../../utils/mdxUtils';
+import formatDate from '../../utils/formatDate';
 
 type PostPageProps = {
     meta: PostMetaData;
@@ -30,6 +31,8 @@ export const getStaticProps = async ({ params }) => {
 
     const mdxSource = await renderToString(content);
     const mdxText = await mdx(content);
+
+    meta.publishedAt = formatDate(meta.publishedAt);
 
     return {
         props: {

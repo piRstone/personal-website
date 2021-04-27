@@ -8,11 +8,11 @@ const Header: FC = () => {
     const blogActive = pathname.split('/')[1] === 'blog' ? 'underline' : '';
 
     return (
-        <header className="py-4 sticky top-0 bg-white dark:bg-gray-900">
+        <header className="py-4 sticky top-0 bg-white dark:bg-gray-900 text-black dark:text-gray-300">
             <div className="max-w-screen-lg mx-auto">
                 <div className="flex flex-1 flex-row items-center">
                     <Link href="/">
-                        <a className="uppercase font-black tracking-wider text-black text-lg dark:text-gray-300 mr-20">
+                        <a className="uppercase font-black tracking-wider text-lg mr-20">
                             pirstone
                         </a>
                     </Link>
