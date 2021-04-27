@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+em {
+    position: relative;
+    font-weight: bold;
+    margin: 0 0.4em;
+    z-index: 1;
+}
+
+em::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -6px;
+    height: 22px;
+    width: 110%;
+    border-radius: 3px;
+    background-color: #2563eb;
+    z-index: -1;
+}
