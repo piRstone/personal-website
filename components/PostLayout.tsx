@@ -3,12 +3,7 @@ import { NextSeo } from 'next-seo'
 import Footer from './Footer'
 import Header from './Header'
 import PostTitle from './PostTitle'
-
-export type PostMetaData = {
-    title: string
-    excerpt: string
-    publishedAt: string
-}
+import { PostMetaData } from '../types'
 
 type PostLayoutProps = {
     meta: PostMetaData
@@ -24,6 +19,8 @@ const PostLayout: FC<PostLayoutProps> = ({ meta, content }) => {
                 <main className="container mx-auto py-6">
                     <div className="prose dark:prose-dark max-w-screen-sm mx-auto">
                         <PostTitle meta={meta} />
+                        <p>{meta.excerpt}</p>
+                        {meta.picture && <img src={meta.picture} alt="" />}
                         {content}
                     </div>
                 </main>

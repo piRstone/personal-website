@@ -7,13 +7,7 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import PostCard from '../../components/PostCard'
 import formatDate from '../../utils/formatDate'
-
-export type Post = {
-    content: string
-    data: { [p: string]: any }
-    filePath: string
-    publishedAt: string
-}
+import { Post } from '../../types'
 
 type BlogRootPageProps = {
     posts: Post[]

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { PostMetaData } from './PostLayout'
+import { PostMetaData } from '../types'
 import styles from '../styles/PostTitle.module.css'
 
 type PostTitleProps = {
