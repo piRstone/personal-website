@@ -1,23 +1,23 @@
-import path from 'path';
-import fs from 'fs';
-import React, { FC } from 'react';
-import matter from 'gray-matter';
-import { postFilePaths, POSTS_PATH } from '../../utils/mdxUtils';
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
-import PostCard from '../../components/PostCard';
-import formatDate from '../../utils/formatDate';
+import path from 'path'
+import fs from 'fs'
+import React, { FC } from 'react'
+import matter from 'gray-matter'
+import { postFilePaths, POSTS_PATH } from '../../utils/mdxUtils'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
+import PostCard from '../../components/PostCard'
+import formatDate from '../../utils/formatDate'
 
 export type Post = {
-    content: string;
-    data: { [p: string]: any };
-    filePath: string;
+    content: string
+    data: { [p: string]: any }
+    filePath: string
     publishedAt: string
 }
 
 type BlogRootPageProps = {
-    posts: Post[];
-};
+    posts: Post[]
+}
 
 const BlogRootPage: FC<BlogRootPageProps> = ({ posts }) => {
     return (
@@ -42,28 +42,28 @@ const BlogRootPage: FC<BlogRootPageProps> = ({ posts }) => {
             </main>
             <Footer />
         </div>
-    );
-};
+    )
+}
 
-export default BlogRootPage;
+export default BlogRootPage
 
 export const getStaticProps = () => {
     const posts: Post[] = postFilePaths.map((filePath) => {
-        const source = fs.readFileSync(path.join(POSTS_PATH, filePath));
-        const { content, data } = matter(source);
-        const publishedAt = formatDate(data.publishedAt);
+        const source = fs.readFileSync(path.join(POSTS_PATH, filePath))
+        const { content, data } = matter(source)
+        const publishedAt = formatDate(data.publishedAt)
 
         return {
             content,
             data,
             filePath,
-            publishedAt
-        };
-    });
+            publishedAt,
+        }
+    })
 
     return {
         props: {
             posts,
         },
-    };
-};
+    }
+}

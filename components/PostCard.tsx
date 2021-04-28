@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import React, { FC } from 'react';
+import Link from 'next/link'
+import React, { FC } from 'react'
 
 type PostCardProps = {
-    title: string;
-    filePath: string;
-    publishedAt: string;
-    excerpt: string;
+    title: string
+    filePath: string
+    publishedAt: string
+    excerpt: string
 }
 
 const PostCard: FC<PostCardProps> = ({ title, filePath, publishedAt, excerpt }) => {
@@ -21,7 +21,7 @@ const PostCard: FC<PostCardProps> = ({ title, filePath, publishedAt, excerpt }) 
                 </Link>
             </article>
         </div>
-    );
-};
+    )
+}
 
-export default PostCard;
+export default PostCard

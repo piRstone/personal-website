@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { FC } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const Header: FC = () => {
-    const { pathname } = useRouter();
+    const { pathname } = useRouter()
 
-    const blogActive = pathname.split('/')[1] === 'blog' ? 'underline' : '';
+    const blogActive = pathname.split('/')[1] === 'blog' ? 'underline' : ''
 
     return (
         <header className="py-4 sticky top-0 bg-white dark:bg-gray-900 text-black dark:text-gray-300">
@@ -33,7 +33,7 @@ const Header: FC = () => {
                 </div>
             </div>
         </header>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header
