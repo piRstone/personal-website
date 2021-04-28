@@ -1,3 +1,5 @@
+@import url('https://rsms.me/inter/inter.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,7 @@ em {
     font-weight: bold;
     margin: 0 0.4em;
     z-index: 1;
+    color: theme('colors.white');
 }
 
 em::before {

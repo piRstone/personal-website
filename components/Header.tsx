@@ -13,7 +13,7 @@ const Header: FC = () => {
                 <div className="flex flex-1 flex-row items-center">
                     <Link href="/">
                         <a className="uppercase font-black tracking-wider text-lg mr-20">
-                            pirstone
+                            Pierre Lavalley
                         </a>
                     </Link>
                     <nav className="font-bold">
