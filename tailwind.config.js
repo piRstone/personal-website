@@ -7,11 +7,45 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter var', ...defaultTheme.fontFamily.sans]
-      }
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.black')
+          }
+        },
+        dark: {
+          css: {
+            color: theme('colors.gray.300'),
+            h1: {
+              color: theme('colors.gray.300'),
+            },
+            h2: {
+              color: theme('colors.gray.300'),
+            },
+            h3: {
+              color: theme('colors.gray.300'),
+            },
+            h4: {
+              color: theme('colors.gray.300'),
+            },
+            h5: {
+              color: theme('colors.gray.300'),
+            },
+            h6: {
+              color: theme('colors.gray.300'),
+            },
+          }
+        }
+      }),
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      typography: 'dark',
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
