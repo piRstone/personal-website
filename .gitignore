@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# IDE
+/.vscode
+
+# pre-commit hooks
+/.husky

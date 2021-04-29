@@ -19,21 +19,27 @@ module.exports = {
             color: theme('colors.gray.300'),
             h1: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
             h2: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
             h3: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
             h4: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
             h5: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
             h6: {
               color: theme('colors.gray.300'),
+              fontFamily: 'Poppins',
             },
           }
         }
