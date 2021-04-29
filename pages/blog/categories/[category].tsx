@@ -21,7 +21,13 @@ const CategoryPage: FC<CategoryPageProps> = ({ posts, category }) => {
             <Header />
             <main className="container mx-auto py-6">
                 <div className="max-w-screen-md mx-auto">
-                    <h1 className="font-bold text-4xl mb-10">{cat.name}</h1>
+                    <h1 className="font-bold text-4xl mb-10">
+                        <span
+                            className={`text-transparent bg-clip-text bg-gradient-to-r from-${cat.colorFrom} to-${cat.colorTo}`}
+                        >
+                            {cat.name}
+                        </span>
+                    </h1>
 
                     {posts.length ? (
                         posts.map((post) => (

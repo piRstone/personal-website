@@ -10,9 +10,9 @@ export const categories: Record<string, Category> = {
     domotique: {
         name: 'Domotique',
         slug: 'domotique',
-        textColor: 'yellow-600',
+        textColor: 'white',
         colorFrom: 'yellow-300',
-        colorTo: 'yellow-400',
+        colorTo: 'yellow-500',
     },
 }
 
