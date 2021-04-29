@@ -17,7 +17,7 @@ type CategoryPageProps = {
 const CategoryPage: FC<CategoryPageProps> = ({ posts, category }) => {
     const cat = categories[category]
     return (
-        <div className="bg-white dark:bg-gray-900 min-h-screen">
+        <div className="bg-white dark:bg-gray-900 dark:text-gray-300 min-h-screen">
             <Header />
             <main className="container mx-auto py-6">
                 <div className="max-w-screen-md mx-auto">
