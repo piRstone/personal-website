@@ -14,6 +14,13 @@ export const categories: Record<string, Category> = {
         colorFrom: 'yellow-300',
         colorTo: 'yellow-500',
     },
+    raspberry: {
+        name: 'Raspberry Pi',
+        slug: 'raspberry',
+        textColor: 'white',
+        colorFrom: 'red-500',
+        colorTo: 'red-700',
+    },
 }
 
 export default Category

@@ -29,6 +29,7 @@ const BlogRootPage: FC<BlogRootPageProps> = ({ posts }) => {
                                 publishedAt={post.publishedAt}
                                 filePath={post.filePath}
                                 excerpt={post.data.excerpt}
+                                category={post.data.category}
                             />
                         ))}
                     </div>

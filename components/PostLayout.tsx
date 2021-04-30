@@ -4,7 +4,7 @@ import Footer from './Footer'
 import Header from './Header'
 import PostTitle from './PostTitle'
 import CategoryTag from './CategoryTag'
-import { PostMetaData } from '../types'
+import { categories, PostMetaData } from '../types'
 import { useRouter } from 'next/router'
 
 type PostLayoutProps = {
@@ -18,7 +18,17 @@ const PostLayout: FC<PostLayoutProps> = ({ meta, content }) => {
 
     return (
         <>
-            <NextSeo title={meta.title} description={meta.excerpt} canonical={canonicalUrl} />
+            <NextSeo
+                title={meta.title}
+                description={meta.excerpt}
+                canonical={canonicalUrl}
+                openGraph={{
+                    article: {
+                        publishedTime: meta.publishedAt,
+                        tags: [categories[meta.category]?.name],
+                    },
+                }}
+            />
             <div className="bg-white dark:bg-gray-900 min-h-screen">
                 <Header />
                 <main className="container mx-auto py-6 px-4 md:px-0">

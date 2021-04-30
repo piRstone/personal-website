@@ -5,6 +5,8 @@ function MyApp({ Component, pageProps }) {
     return (
         <>
             <DefaultSeo
+                title="Pierre Lavalley"
+                description="Articles tech & dev et sur tous les sujets qui me passionnent !"
                 openGraph={{
                     type: 'website',
                     locale: 'fr-FR',

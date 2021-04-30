@@ -37,6 +37,7 @@ const CategoryPage: FC<CategoryPageProps> = ({ posts, category }) => {
                                 publishedAt={post.publishedAt}
                                 filePath={post.filePath}
                                 excerpt={post.data.excerpt}
+                                category={post.data.category}
                             />
                         ))
                     ) : (
