@@ -32,7 +32,7 @@ const PostLayout: FC<PostLayoutProps> = ({ meta, content }) => {
             <div className="bg-white dark:bg-gray-900 min-h-screen">
                 <Header />
                 <main className="container mx-auto py-6 px-4 md:px-0">
-                    <div className="max-w-screen-sm mx-auto">
+                    <div className="max-w-screen-md mx-auto">
                         <div className="flex justify-center mt-3 mb-9">
                             <CategoryTag categoryName={meta.category} />
                         </div>

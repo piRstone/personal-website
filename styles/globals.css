@@ -24,3 +24,7 @@ em::before {
     background-color: #2563eb;
     z-index: -1;
 }
+
+.prose {
+    max-width: 100%;
+}

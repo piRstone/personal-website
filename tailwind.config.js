@@ -6,40 +6,39 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['-apple-system', 'BlinkMacSystemFont', 'Inter var', ...defaultTheme.fontFamily.sans]
+        sans: ['Avenir', 'Futura', 'Inter var', '-apple-system', 'BlinkMacSystemFont', ...defaultTheme.fontFamily.sans]
       },
       typography: (theme) => ({
         DEFAULT: {
           css: {
-            color: theme('colors.black')
+            color: theme('colors.black'),
+            fontSize: '1.1em',
           }
         },
         dark: {
           css: {
             color: theme('colors.gray.300'),
+            fontSize: '1.1em',
             h1: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
             },
             h2: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
             },
             h3: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
             },
             h4: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
             },
             h5: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
             },
             h6: {
               color: theme('colors.gray.300'),
-              fontFamily: 'Poppins',
+            },
+            blockquote: {
+              color: theme('colors.gray.300'),
             },
           }
         }

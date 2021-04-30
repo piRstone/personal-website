@@ -23,7 +23,7 @@ const Header: FC = () => {
                                     <a className={blogActive}>Blog</a>
                                 </Link>
                             </li>
-                            <li className="py-1 px-3">
+                            <li className="py-1 pl-3">
                                 <Link href="/">
                                     <a>À propos</a>
                                 </Link>
