@@ -1,6 +1,6 @@
 type Post = {
     content: string
-    data: { [p: string]: any }
+    data: { [p: string]: any } // eslint-disable-line
     filePath: string
     publishedAt: string
 }

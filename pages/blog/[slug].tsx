@@ -12,7 +12,7 @@ import formatDate from '../../utils/formatDate'
 
 type PostPageProps = {
     meta: PostMetaData
-    source: any
+    source: any         // eslint-disable-line
 }
 
 const PostPage: FC<PostPageProps> = ({ meta, source }) => {
