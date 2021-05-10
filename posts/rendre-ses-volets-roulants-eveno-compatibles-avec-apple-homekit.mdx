@@ -1,0 +1,245 @@
+---
+title: Rendre ses volets roulants Eveno compatibles avec Apple HomeKit
+excerpt: Comment associer ses volets roulants Eveno / Profalux pilotés en Zigbee à l'app Maison pour pouvoir les commander depuis son téléphone ou grâce à Siri.
+publishedAt: "2021-05-10"
+picture: https://source.unsplash.com/JNIVMXNoaYs/1920x900
+category: domotique
+---
+
+## Zigbee c'est bien, mais gare à la compatibilité !
+
+J'ai récemment fais construire ma maison et au moment de la conception, mon constructeur me proposait de choisir entre deux modèles : un de la marque Somfy avec son protocole propriétaire et ses accessoires au coût non négligeable, et un autre de marque Eveno (que je ne connaissais alors pas) utilisant le protocole **[Zibgee](https://zigbeealliance.org/fr/)**, donc open-source (et aussi moins cher 😄) !
+
+À ce moment là, la balance penche vers les volets Eveno avec dans ma tête la promesse de pouvoir les gérer moi-même à l'aide d'un **Raspberry Pi** et du **[pont Hombridge](https://homebridge.io/)**, projet open-source que j'avais découvert un peu avant.
+
+Je me suis renseigné entre temps pour savoir comment m'y prendre et surtout, quel hardware utiliser pour émettre ce fameux signal Zigbee. Après plusieurs heures de recherches et de comparaison entre les différentes solutions existantes, mon choix s'arrête sur la clé USB **[Phoscon Conbee II](https://phoscon.de/en/conbee2)**.
+
+![https://phoscon.de/conbee/img/01_PANA6449_2.jpg](https://phoscon.de/conbee/img/01_PANA6449_2.jpg)
+
+La clé USB Conbee II
+
+Des mois plus tard et l'emménagement fait, je m’attelle à la mise en place de cette infrastructure. Sauf que je me rends compte à ce moment là (un peu tard oui) que ces volets ne sont pas dans la [liste officielle des appareils compatibles](https://phoscon.de/en/conbee2/compatible) avec la Conbee II et son plugin **deconZ**. Par chance, [une demande d'intégration](https://github.com/dresden-elektronik/deconz-rest-plugin/issues/2739) de ceux-ci a été faite en mai 2020 sur Github. Eh oui parce que l'avantage de cette clé USB Zigbee est que [son plugin est open-source](https://github.com/dresden-elektronik/deconz-rest-plugin) ! On a donc facilement accès à une API REST pour gérer tous les appareils qui y ont été associés.
+
+Attaquons donc cette installation !
+
+## Installation d'Homebridge
+
+Il nous faut tout d'abord un **Raspberry Pi** avec une installation standard de [Raspberry Pi OS Lite](https://www.raspberrypi.org/software/operating-systems/) (la version headless). J'utilise chez moi un Raspberry Pi 3.
+
+Photo Raspi 3
+
+Comme il est headless, on va se faciliter la tache en activant de base le SSH et en configurant notre WiFi pour qu'il s'y connecte tout seul au démarrage. Pour ce, créez un fichier nommé `ssh` (sans extension) à la racine de la carte SD.
+
+Pour le WiFi, créez à la racine également un fichier `wpa_supplicant.conf` dans lequel on va ajouter les identifiants du routeur
+
+```bash
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=GB
+
+network={
+	ssid="Livebox-XXXX"               # SSID de votre box
+	psk="0A0139E1FF483D72F948F0F045"  # Mot de passe WiFi
+	key_mgmt=WPA-PSK
+}
+```
+
+Maintenant que notre OS est installé et bien connecté à internet, on peut [installer Homebridge](https://github.com/homebridge/homebridge/wiki/Install-Homebridge-on-Raspbian). On aura besoin de l'adresse IP du Raspberry pour pourvoir accéder à l'interface web.
+
+On commence par installer Node JS :
+
+```bash
+# setup repo
+curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+
+# install Node.js
+sudo apt install -y nodejs gcc g++ make python net-tools
+
+# test node is working
+node -v
+```
+
+On installe ensuite Homebridge et son interface web :
+
+```bash
+sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
+```
+
+Enfin on termine par activer le service qui fera en sorte qu'Homebridge se lance automatiquement au redémarrage du Raspberry :
+
+```bash
+sudo hb-service install --user homebridge
+```
+
+On peut maintenant accéder à l'interface web d'Homebridge en saisissant son IP suivi de son port dans un navigateur : **http://192.168.1.15:8581**
+
+![https://user-images.githubusercontent.com/3979615/71886653-b16d3f80-3190-11ea-9ff8-49dc4ae4fff0.png](https://user-images.githubusercontent.com/3979615/71886653-b16d3f80-3190-11ea-9ff8-49dc4ae4fff0.png)
+
+L'interface web de Homebridge
+
+Et voilà !
+
+Il ne reste plus qu'à ouvrir l'appareil photo de votre iPhone et de scanner le QR Code en haut à gauche pour que le pont soit ajouté automatiquement dans l'app Maison !
+
+## Installation de deconZ
+
+Installons maintenant [le plugin deconZ]() via lequel nous allons piloter nos équipements.
+
+On commence par donner les droits à notre utilisateur d'accéder aux ports USB :
+
+```bash
+sudo gpasswd -a $USER dialout
+```
+
+*À noter d'un redémarrage sera nécessaire pour prendre en compte ce changement*
+
+On ajoute la clé publique de Phoscon :
+
+```bash
+ wget -O - http://phoscon.de/apt/deconz.pub.key | \
+           sudo apt-key add -
+```
+
+Puis on ajoute le dépôt deconZ (version stable) à la liste des dépôts APT :
+
+```bash
+sudo sh -c "echo 'deb http://phoscon.de/apt/deconz \
+            $(lsb_release -cs) main' > \
+            /etc/apt/sources.list.d/deconz.list"
+```
+
+Enfin, on met à jour la liste des paquets et on installe deconZ :
+
+```bash
+sudo apt update
+sudo apt install deconz
+```
+
+Une dernière manip à faire est de [désactiver l'app desktop](https://github.com/dresden-elektronik/deconz-rest-plugin#headless-support-for-linux) qui est installée de base et qui ne nous servira pas étant donné que nous sommes en headless ! On activera le service deconZ dans le même temps pour qu'il se lance au démarrage du Raspberry :
+
+```bash
+sudo systemctl enable deconz
+sudo systemctl disable deconz-gui
+sudo systemctl stop deconz-gui
+```
+
+🔄 On peut maintenant redémarrer notre Raspberry.
+
+Une fois relancé, vous devriez voir l'interface web de deconZ en accédant à l'IP du Raspberry (sans port) : http://192.168.1.15
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_settings-gateway2.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914521gwid00212EFFFF07089B.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_settings-gateway2.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914521gwid00212EFFFF07089B.png)
+
+Créez un groupe pour pouvoir y ajouter plus tard vos volets.
+
+### Conbee II mal reconnue par deconZ
+
+Si votre clé USB est mal reconnue, avec *Vendor unknown* et aucun *Product* name il faudra mettre à jour le firmware de celle-ci.
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/f5e1fd1829ca2045ad179e5e83f93dd56aac0af8.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/f5e1fd1829ca2045ad179e5e83f93dd56aac0af8.png)
+
+Pour ce faire, je vous invite à suivre cette procédure : [https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Update-deCONZ-manually#update-in-ubuntu](https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Update-deCONZ-manually#update-in-ubuntu)
+
+Une fois faite, vous devriez voir l'image de la Conbee II et les bonnes informations apparaitre.
+
+## Appairage des volets
+
+Maintenant que tout fonctionne, on peut appairer nos volets !
+
+J'ai pour ma part des télécommandes murales Zigbee mais la procédure est la même pour les télécommandes portables.
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1953.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1953.jpg)
+
+On commence donc par prendre un trombone 📎  et à retourner là télécommande. Il y a au dos 2 trous : un R et un F.
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1954.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1954.jpg)
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/profalux_inclusion_etape1.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/profalux_inclusion_etape1.png)
+
+- Appuyez **5 fois sur R**. Assurez-vous de bien voir la LED rouge clignoter à chaque appui.
+- La télécommande clignote vert et volet fait un petit va-et-vient.
+- Attendre que le volet ne bouge plus et que la télécommande ne clignote plus puis **dans la minute qui suit**, appuyez sur STOP.
+- Le volet refait un petit va-et-vient.
+
+À ce moment le volet fonctionne à l'envers si vous essayez de le bouger. Pour inverser la commande :
+
+- Appuyez une fois sur F.
+- Puis appuyez sur STOP.
+- Le volet fait un petit va-et-vient.
+
+La commande est désormais dans le bon sens.
+
+- Fermez le volet complètement.
+
+**Inclusion du volet**
+
+Dans le groupe que vous avez créé auparavant, cliquez sur **Edit** puis sur **Manage lights** enfin sur **Add new light**. Là une barre de chargement s'affiche, deconZ est entré en mode inclusion.
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_group-lamps.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914522gwid00212EFFFF07089B.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_group-lamps.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914522gwid00212EFFFF07089B.jpg)
+
+Reprenez votre télécommande puis :
+
+- Appuyez **une fois sur R.**
+- Puis appuyez sur la flèche du haut.
+- Le volet fait plusieurs petits va-et-vient. Attendez que la télécommande ne clignote plus et que le volet ne bouge plus.
+- Appuyez sur la touche STOP.
+- Ouvrez et fermez **2 FOIS complètement** le volet.
+- À la 2ème fermeture, le volet fait un petit va-et-vient.
+
+Le volet doit apparaitre sous le nom de *New light 1*.
+
+Si le volet apparait avant la fin des mouvements du volets, terminez quand même la procédure jusqu'au bout sous peine que le volet ne fonctionne pas correctement par la suite.
+
+Vous pouvez maintenant cliquer sur *New light 1* pour le renommer. Pendant que la fenêtre d'édition est ouverte, le volet fait des petits mouvements pour s'identifier et s'assurer qu'on modifie le bon.
+
+Si vous avez perdu le lien entre la télécommande et le volet par une fausse manip, vous allez malheureusement devoir ouvrir votre volet pour accéder à son émetteur 😞 [La procédure est ici en bas de page](http://kiwihc16.free.fr/Profalux.html).
+
+## Lier deconZ à Homebridge
+
+Nous pouvons désormais lier deconZ à Homebridge pour faire apparaitre nos volets dans l'app Maison !
+
+Rendez-vous sur l'interface d'Homebridge et dans l'onglet **Plugins**, recherchez **[homebridge-hue](https://github.com/ebaauw/homebridge-hue)** et installez-le.
+
+Il s'agit d'un plugin open-source qui permet de gérer les accessoires utilisant le protocole Zigbee. Créé à la base pour Philips Hue, il peut également piloter les accessoires associés avec deconZ.
+
+Une fois installé, une fenêtre de paramètres s'ouvre.
+
+Dans le champ **Bridges/Gateways**, saisissez **127.0.0.1** qui correspond à l'adresse locale de notre Raspberry étant donné que deconZ est installé sur le même Raspi que Homebridge.
+
+Maintenant, pour que homebridge-hue puisse accéder à deconZ, il faut lui en donner l'autorisation. Pour ce faire, retournez dans l'interface de deconZ, dans **Settings > Gateway**, cliquez en bas sur **Advanced** puis sur **Authenticate app**.
+
+Dans la minute qui suit, redémarrez le service Homebridge en cliquant sur le bouton power en haut à droite.
+
+Vous devriez maintenant voir vos volet apparaitre dans l'onglet Accessoire et dans l'app Maison sur votre iPhone !
+
+### Les volets apparaissent comme des ampoules
+
+Un point important à noter est que les volets apparaissent et se comportent comme des ampoules dans Maison.
+
+![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_122450E01257-1.jpeg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_122450E01257-1.jpeg)
+
+Je n'ai pour l'heure pas trouvé de solution pour les faire apparaître en tant que volets et visiblement [deconZ n'est pas là de faire en sorte que ça soit le cas malheureusement](https://github.com/ebaauw/homebridge-hue/issues/975).
+
+Les commandes fonctionnent cependant correctement ainsi que les positions intermédiaires. Vous pouvez donc demander à Siri : "Règle volet salon à 50%" ou encore "Éteint volet cuisine" pour agir sur ceux-ci par la voix.
+
+Une autre solution est de créer un raccourci dans l'app Raccourcis d'Apple pour créer des scénario fermant ou ouvrant tous les volets d'un coup.
+
+Si une solution arrive par la suite pour régler ce problème, je ne manquerai pas de mettre à jour cet article !
+
+## Réglage de la fin de course
+
+La réinitialisation de la télécommande lors de la procédure d'appairage a perdu dans le même temps le réglage de la fin de course du volet. Vous remarquerez qu'il remonte un peu plus haut qu'avant.
+
+Pas de panique, il suffit de suivre les étapes qui suivent :
+
+- Descendre et arrêter le volet à mi-hauteur.
+- Appuyer **5 fois sur F** (s’assurer que la LED clignote rouge à chaque appui). Le volet fait un mouvement.
+- Descendre **un peu** le volet puis appuyer sur STOP.
+- Descendre **entièrement** le volet jusqu’à ce qu’il s’arrête de lui-même.
+- Remonter le volet et **l’arrêter à l’endroit voulu** en appuyant sur STOP.
+- Descendre entièrement le volet jusqu’à ce qu’il s’arrête de lui-même.
+- Remonter le volet entièrement. Il doit s’arrêter à l’endroit réglé auparavant.
+- Enfin, fermer le volet complètement. Il fait un petit mouvement pour confirmer la fin de la procédure.
+
+Voilà, vous pouvez désormais profiter de votre installation sans avoir à passer dans chaque pièce chaque jour pour ouvrir et fermer chaque volet ! Le grand intérêt de les associer dans l'app Maison est de profiter de la puissance des raccourcis pour automatiser plusieurs scénarios selon le moment de la journée. J'ai entre autres créé un raccourci qui ouvre tous les volets de la maison quand j'éteins mon réveil le matin, plus besoin d'y penser quand on se lève !
+
+À vous d'adapter vos scénarios selon vos besoins !
