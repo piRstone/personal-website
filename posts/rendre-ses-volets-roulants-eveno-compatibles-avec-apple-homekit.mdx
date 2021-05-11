@@ -14,9 +14,7 @@ J'ai récemment fais construire ma maison et au moment de la conception, mon con
 
 Je me suis renseigné entre temps pour savoir comment m'y prendre et surtout, quel hardware utiliser pour émettre ce fameux signal Zigbee. Après plusieurs heures de recherches et de comparaison entre les différentes solutions existantes, mon choix s'arrête sur la clé USB **[Phoscon Conbee II](https://phoscon.de/en/conbee2)**.
 
-![https://phoscon.de/conbee/img/01_PANA6449_2.jpg](https://phoscon.de/conbee/img/01_PANA6449_2.jpg)
-
-La clé USB Conbee II
+![La clé USB Conbee II](https://phoscon.de/conbee/img/01_PANA6449_2.jpg)
 
 Des mois plus tard et l'emménagement fait, je m’attelle à la mise en place de cette infrastructure. Sauf que je me rends compte à ce moment là (un peu tard oui) que ces volets ne sont pas dans la [liste officielle des appareils compatibles](https://phoscon.de/en/conbee2/compatible) avec la Conbee II et son plugin **deconZ**. Par chance, [une demande d'intégration](https://github.com/dresden-elektronik/deconz-rest-plugin/issues/2739) de ceux-ci a été faite en mai 2020 sur Github. Eh oui parce que l'avantage de cette clé USB Zigbee est que [son plugin est open-source](https://github.com/dresden-elektronik/deconz-rest-plugin) ! On a donc facilement accès à une API REST pour gérer tous les appareils qui y ont été associés.
 
@@ -25,8 +23,6 @@ Attaquons donc cette installation !
 ## Installation d'Homebridge
 
 Il nous faut tout d'abord un **Raspberry Pi** avec une installation standard de [Raspberry Pi OS Lite](https://www.raspberrypi.org/software/operating-systems/) (la version headless). J'utilise chez moi un Raspberry Pi 3.
-
-Photo Raspi 3
 
 Comme il est headless, on va se faciliter la tache en activant de base le SSH et en configurant notre WiFi pour qu'il s'y connecte tout seul au démarrage. Pour ce, créez un fichier nommé `ssh` (sans extension) à la racine de la carte SD.
 
@@ -73,9 +69,7 @@ sudo hb-service install --user homebridge
 
 On peut maintenant accéder à l'interface web d'Homebridge en saisissant son IP suivi de son port dans un navigateur : **http://192.168.1.15:8581**
 
-![https://user-images.githubusercontent.com/3979615/71886653-b16d3f80-3190-11ea-9ff8-49dc4ae4fff0.png](https://user-images.githubusercontent.com/3979615/71886653-b16d3f80-3190-11ea-9ff8-49dc4ae4fff0.png)
-
-L'interface web de Homebridge
+![L'interface web de Homebridge](https://user-images.githubusercontent.com/3979615/71886653-b16d3f80-3190-11ea-9ff8-49dc4ae4fff0.png)
 
 Et voilà !
 
@@ -127,7 +121,7 @@ sudo systemctl stop deconz-gui
 
 Une fois relancé, vous devriez voir l'interface web de deconZ en accédant à l'IP du Raspberry (sans port) : http://192.168.1.15
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_settings-gateway2.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914521gwid00212EFFFF07089B.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_settings-gateway2.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914521gwid00212EFFFF07089B.png)
+![Interface de deconZ](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/deconz-interface.png)
 
 Créez un groupe pour pouvoir y ajouter plus tard vos volets.
 
@@ -135,7 +129,7 @@ Créez un groupe pour pouvoir y ajouter plus tard vos volets.
 
 Si votre clé USB est mal reconnue, avec *Vendor unknown* et aucun *Product* name il faudra mettre à jour le firmware de celle-ci.
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/f5e1fd1829ca2045ad179e5e83f93dd56aac0af8.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/f5e1fd1829ca2045ad179e5e83f93dd56aac0af8.png)
+![La clé Conbee II n'est pas reconnue par deconZ](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/conbee-ii-not-recognized.png)
 
 Pour ce faire, je vous invite à suivre cette procédure : [https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Update-deCONZ-manually#update-in-ubuntu](https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Update-deCONZ-manually#update-in-ubuntu)
 
@@ -147,13 +141,13 @@ Maintenant que tout fonctionne, on peut appairer nos volets !
 
 J'ai pour ma part des télécommandes murales Zigbee mais la procédure est la même pour les télécommandes portables.
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1953.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1953.jpg)
+![La télécommande sans fil Zigbee des volets roulants](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/remote-recto.jpg)
 
 On commence donc par prendre un trombone 📎  et à retourner là télécommande. Il y a au dos 2 trous : un R et un F.
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1954.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_1954.jpg)
+![Le dos de la télécommande avec les boutons R et F](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/remote-verso.jpg)
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/profalux_inclusion_etape1.png](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/profalux_inclusion_etape1.png)
+![Procédure de réinitialiation de la télécommande](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/profalux-inclusion-etape1.png)
 
 - Appuyez **5 fois sur R**. Assurez-vous de bien voir la LED rouge clignoter à chaque appui.
 - La télécommande clignote vert et volet fait un petit va-et-vient.
@@ -174,7 +168,7 @@ La commande est désormais dans le bon sens.
 
 Dans le groupe que vous avez créé auparavant, cliquez sur **Edit** puis sur **Manage lights** enfin sur **Add new light**. Là une barre de chargement s'affiche, deconZ est entré en mode inclusion.
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_group-lamps.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914522gwid00212EFFFF07089B.jpg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/192.168.1.16_pwa_group-lamps.html__v39c06a8bf019292a02f6d853cecde4ae8a916a914522gwid00212EFFFF07089B.jpg)
+![La passerelle est ouverte pour l'inclusion de nouveaux appareils](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/deconz-gateway-opened.jpg)
 
 Reprenez votre télécommande puis :
 
@@ -215,7 +209,7 @@ Vous devriez maintenant voir vos volet apparaitre dans l'onglet Accessoire et da
 
 Un point important à noter est que les volets apparaissent et se comportent comme des ampoules dans Maison.
 
-![Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_122450E01257-1.jpeg](Rendre%20ses%20volets%20roulants%20Eveno%20compatibles%20avec%20%200c3f90f497e3442782db3bf122853cad/IMG_122450E01257-1.jpeg)
+![Les volets apparaissent comme des lumières dans l'app Maison](/img/rendre-ses-volets-roulants-eveno-compatibles-avec-apple-homekit/shutter-appears-as-light.jpeg)
 
 Je n'ai pour l'heure pas trouvé de solution pour les faire apparaître en tant que volets et visiblement [deconZ n'est pas là de faire en sorte que ça soit le cas malheureusement](https://github.com/ebaauw/homebridge-hue/issues/975).
 
