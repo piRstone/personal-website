@@ -4,6 +4,7 @@ import { FC } from 'react'
 import matter from 'gray-matter'
 import renderToString from 'next-mdx-remote/render-to-string'
 import hydrate from 'next-mdx-remote/hydrate'
+import mdxPrism from 'mdx-prism'
 import PostLayout from '../../components/PostLayout'
 import { PostMetaData } from '../../types'
 
@@ -28,7 +29,11 @@ export const getStaticProps = async ({ params }) => {
 
     const { content, data: meta } = matter(source)
 
-    const mdxSource = await renderToString(content)
+    const mdxSource = await renderToString(content, {
+        mdxOptions: {
+            rehypePlugins: [mdxPrism],
+        },
+    })
 
     meta.publishedAt = formatDate(meta.publishedAt)
 
