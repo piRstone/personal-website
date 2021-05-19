@@ -13,6 +13,18 @@ module.exports = {
           css: {
             color: theme('colors.black'),
             fontSize: '1.1em',
+            code: {
+              backgroundColor: theme('colors.gray.100'),
+              padding: '5px 6px',
+              borderRadius: '8px',
+              fontWeight: 'normal',
+              '&::before': {
+                display: 'none',
+              },
+              '&::after': {
+                display: 'none',
+              },
+            },
           }
         },
         dark: {
@@ -39,6 +51,16 @@ module.exports = {
             },
             blockquote: {
               color: theme('colors.gray.300'),
+            },
+            strong: {
+              color: theme('colors.gray.300'),
+            },
+            a: {
+              color: '#337ff1',
+            },
+            code: {
+              color: theme('colors.gray.300'),
+              backgroundColor: '#1d2c46',
             },
           }
         }
