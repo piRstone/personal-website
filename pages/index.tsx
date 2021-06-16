@@ -24,7 +24,7 @@ const Home: FC<HomeProps> = ({ posts }) => {
             <Header />
             <main className="container mx-auto py-6">
                 <div className="max-w-screen-md mx-auto">
-                    <h2 className="font-bold text-4xl mb-10">Dernier articles</h2>
+                    <h2 className="font-bold text-4xl mb-10">Derniers articles</h2>
                     <div className="flex flex-col">
                         {posts.map((post) => (
                             <PostCard
