@@ -14,7 +14,7 @@ const CategoryTag: FC<CategoryTagProps> = ({ className, categoryName }) => {
 
     return (
         <div className={className}>
-            <Link href={`/blog/categories/${category.slug}`}>
+            <Link href={`/blog/categories/${category.slug}`} passHref legacyBehavior>
                 <a
                     className={`bg-gradient-to-r from-${category.colorFrom} to-${category.colorTo} text-${category.textColor} py-2 px-3 rounded-md font-bold`}
                 >

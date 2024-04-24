@@ -2,8 +2,8 @@ import path from 'path'
 import fs from 'fs'
 import { FC } from 'react'
 import matter from 'gray-matter'
-import renderToString from 'next-mdx-remote/render-to-string'
-import hydrate from 'next-mdx-remote/hydrate'
+import { serialize } from 'next-mdx-remote/serialize'
+import { MDXRemote } from 'next-mdx-remote'
 import mdxPrism from 'mdx-prism'
 import PostLayout from '../../components/PostLayout'
 import { PostMetaData } from '../../types'
@@ -17,8 +17,12 @@ type PostPageProps = {
 }
 
 const PostPage: FC<PostPageProps> = ({ meta, source }) => {
-    const content = hydrate(source)
-    return <PostLayout meta={meta} content={content} />
+    // const content = hydrate(source)
+    return (
+        <PostLayout meta={meta}>
+            <MDXRemote {...source} />
+        </PostLayout>
+    )
 }
 
 export default PostPage
@@ -29,7 +33,7 @@ export const getStaticProps = async ({ params }) => {
 
     const { content, data: meta } = matter(source)
 
-    const mdxSource = await renderToString(content, {
+    const mdxSource = await serialize(content, {
         mdxOptions: {
             rehypePlugins: [mdxPrism],
         },
