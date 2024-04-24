@@ -6,6 +6,7 @@ import PostTitle from './PostTitle'
 import CategoryTag from './CategoryTag'
 import { categories, PostMetaData } from '../types'
 import { useRouter } from 'next/router'
+import { Analytics } from '@vercel/analytics/react'
 
 type PostLayoutProps = React.PropsWithChildren<{
     meta: PostMetaData
@@ -17,6 +18,7 @@ const PostLayout: FC<PostLayoutProps> = ({ meta, children }) => {
 
     return (
         <>
+            <Analytics />
             <NextSeo
                 title={meta.title}
                 description={meta.excerpt}
