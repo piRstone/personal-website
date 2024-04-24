@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC } from 'react'
 import { NextSeo } from 'next-seo'
 import Footer from './Footer'
 import Header from './Header'
@@ -6,18 +6,19 @@ import PostTitle from './PostTitle'
 import CategoryTag from './CategoryTag'
 import { categories, PostMetaData } from '../types'
 import { useRouter } from 'next/router'
+import { Analytics } from '@vercel/analytics/react'
 
-type PostLayoutProps = {
+type PostLayoutProps = React.PropsWithChildren<{
     meta: PostMetaData
-    content: ReactNode
-}
+}>
 
-const PostLayout: FC<PostLayoutProps> = ({ meta, content }) => {
+const PostLayout: FC<PostLayoutProps> = ({ meta, children }) => {
     const { asPath } = useRouter()
     const canonicalUrl = `${process.env.NEXT_PUBLIC_BASE_URL}${asPath}`
 
     return (
         <>
+            <Analytics />
             <NextSeo
                 title={meta.title}
                 description={meta.excerpt}
@@ -40,7 +41,7 @@ const PostLayout: FC<PostLayoutProps> = ({ meta, content }) => {
                             <PostTitle meta={meta} />
                             <p>{meta.excerpt}</p>
                             {meta.picture && <img src={meta.picture} alt="" />}
-                            {content}
+                            {children}
                         </div>
                     </div>
                 </main>
